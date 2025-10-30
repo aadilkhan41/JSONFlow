@@ -15,8 +15,8 @@ This project allows users to upload, preview, manage, and download JSON. It incl
 - 🔍 **Real-time Search**
 - 📁 **Visualize JSON**
 - ⚡ **Download JSON as Image**
-- **View Mode (Dark/Light)**
-- **Zoom In/Out & Fit Screen**
+- ☀️ **View Mode (Dark/Light)**
+- 🔍 **Zoom In/Out & Fit Screen**
 ---
 
 ## 📦 Installation
