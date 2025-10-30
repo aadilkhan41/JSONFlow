@@ -1,0 +1,36 @@
+.controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 6px;
+}
+
+.buttonStyle {
+    background: #E5E7EB;
+    color: #1E1E1E;
+    border: 1px solid #414141;
+    padding: 9px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-sizing: border-box;
+}
+
+.buttonStyle.dark {
+    background: #1E1E1E;
+    color: #E5E7EB;
+}
+
+.buttonStyle svg {
+    width: 18px;
+    height: 18px;
+    stroke: #1E1E1E;
+}
+
+.buttonStyle.dark svg{
+    stroke: #E5E7EB;
+}

@@ -1,0 +1,73 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e5e7eb;
+    color: #111;
+    padding: 10px 20px;
+    border-bottom: 1px solid #414141;
+}
+
+.navbar.dark {
+    background: #1E1E1E;
+    color: #fff;
+}
+
+.heading {
+    color: #2B2C3E;
+    margin: 0;
+    font-weight: 400;
+}
+
+.heading.dark {
+    color: #f3f4f6;
+}
+
+.navControls {
+    display: flex;
+    gap: 5px;
+}
+
+.searchInput {
+    padding: 6px 8px;
+    border-radius: 5px;
+    border: 1px solid #414141;
+    background: #fff;
+    color: #111;
+    font-family: monospace;
+    min-width: 250px;
+}
+
+.searchInput.dark {
+    background: #1E1E1E;
+    color: #E5E7EB;
+}
+
+.buttonStyle {
+    background: #E5E7EB;
+    color: #1E1E1E;
+    border: 1px solid #414141;
+    padding: 9px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 5;
+    box-sizing: border-box;
+}
+
+.buttonStyle.dark {
+    background: #1E1E1E;
+    color: #E5E7EB;
+}
+
+.buttonStyle svg {
+    width: 18px;
+    height: 18px;
+    stroke: #1E1E1E;
+}
+
+.buttonStyle.dark svg{
+    stroke: #E5E7EB;
+}

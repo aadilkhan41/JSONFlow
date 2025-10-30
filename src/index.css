@@ -1,0 +1,32 @@
+:root {
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+body {
+    margin: 0;
+}
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 10px;           /* vertical scrollbar */
+  height: 10px;          /* horizontal scrollbar */
+}
+
+/* Scrollbar track (background area) */
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0);   /* dark track */
+  border-radius: 5px;
+}
+
+/* Scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: #888;       /* gray thumb */
+  border-radius: 5px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

@@ -1,0 +1,25 @@
+.treeCont {
+    width: 100%;
+    height: 100%;
+    background: #f9fafb;
+    transition: background 0.3s;
+}
+
+.treeCont.dark {
+    background: #1E1E1E;
+}
+
+.searchResult {
+    position: absolute;
+    bottom: 10;
+    left: 10;
+    padding: 6px 10px;
+    border-radius: 4;
+    color: #1E1E1E;
+    background: #e5e7eb;
+}
+
+.searchResult.dark{
+    background: #1E1E1E;
+    color: #E5E7EB;
+}

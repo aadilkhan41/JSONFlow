@@ -1,0 +1,17 @@
+.node {
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+    transition: border 0.3s, background 0.3s;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.label {
+    color: #5EB9EB;
+}
+
+.handle {
+    opacity: 0;
+}

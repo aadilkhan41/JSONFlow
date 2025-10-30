@@ -1,0 +1,25 @@
+.appCont {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s, color 0.3s;
+    background: #f9fafb;
+    color: #111;
+}
+
+.appCont.dark {
+    background: #1E1E1E;
+    color: #fff;
+}
+
+.appCont article {
+    flex: 1;
+    display: flex;
+}
+
+.appCont section {
+    width: 80%;
+    height: 100%;
+    position: relative;
+}
