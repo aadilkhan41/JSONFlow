@@ -1,4 +1,4 @@
-.container {
+/* .container {
     width: 20%;
     padding: 20px;
     background: #f3f4f6;
@@ -66,4 +66,124 @@
 
 .buttonStyle.dark svg {
     stroke: #E5E7EB;
+} */
+
+
+
+.container {
+    width: 20%;
+    padding: 20px;
+    background: #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #414141;
+    box-sizing: border-box;
+}
+
+.container.dark {
+    background: #1E1E1E;
+}
+
+.textarea {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #414141;
+    color: #111;
+    border-radius: 5px;
+    padding: 10px;
+    flex: 1;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 200px;
+}
+
+.textarea.dark {
+    background: #1E1E1E;
+    color: #E5E7EB;
+}
+
+.error {
+    color: #F87171;
+    font-size: 15px;
+    margin-top: 8px;
+    word-wrap: break-word;
+}
+
+.buttonStyle {
+    background: #E5E7EB;
+    color: #1E1E1E;
+    border: 1px solid #414141;
+    padding: 9px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: background 0.2s, color 0.2s;
+}
+
+.buttonStyle.dark {
+    background: #1E1E1E;
+    color: #E5E7EB;
+}
+
+.buttonStyle:hover {
+    background: #d1d5db;
+}
+
+.buttonStyle.dark:hover {
+    background: #2c2c2c;
+}
+
+.buttonStyle svg {
+    width: 18px;
+    height: 18px;
+    stroke: #1E1E1E;
+}
+
+.buttonStyle.dark svg {
+    stroke: #E5E7EB;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #414141;
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .textarea {
+        min-height: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 15px 10px;
+    }
+
+    .textarea {
+        font-size: 13px;
+        min-height: 200px;
+    }
+
+    .buttonStyle {
+        width: 100%;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .error {
+        font-size: 14px;
+        text-align: center;
+    }
 }

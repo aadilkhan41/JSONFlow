@@ -23,3 +23,14 @@
     height: 100%;
     position: relative;
 }
+
+@media (max-width: 1024px) {
+    .appCont article {
+        flex-direction: column;
+    }
+
+    .appCont section {
+        width: 100%;
+        height: 60%;
+    }
+}

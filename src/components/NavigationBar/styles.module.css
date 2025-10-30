@@ -6,6 +6,8 @@
     color: #111;
     padding: 10px 20px;
     border-bottom: 1px solid #414141;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .navbar.dark {
@@ -17,6 +19,7 @@
     color: #2B2C3E;
     margin: 0;
     font-weight: 400;
+    font-size: 1.5rem;
 }
 
 .heading.dark {
@@ -25,7 +28,9 @@
 
 .navControls {
     display: flex;
-    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .searchInput {
@@ -36,6 +41,8 @@
     color: #111;
     font-family: monospace;
     min-width: 250px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .searchInput.dark {
@@ -53,13 +60,22 @@
     font-weight: 400;
     display: flex;
     align-items: center;
-    gap: 5;
+    gap: 5px;
     box-sizing: border-box;
+    transition: background 0.2s, color 0.2s;
 }
 
 .buttonStyle.dark {
     background: #1E1E1E;
     color: #E5E7EB;
+}
+
+.buttonStyle:hover {
+    background: #d1d5db;
+}
+
+.buttonStyle.dark:hover {
+    background: #2c2c2c;
 }
 
 .buttonStyle svg {
@@ -68,6 +84,24 @@
     stroke: #1E1E1E;
 }
 
-.buttonStyle.dark svg{
+.buttonStyle.dark svg {
     stroke: #E5E7EB;
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .navControls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .searchInput {
+        flex: 1;
+        min-width: 180px;
+    }
 }
