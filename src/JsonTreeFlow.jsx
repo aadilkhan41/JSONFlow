@@ -5,6 +5,7 @@ import JsonField from "./components/JsonField/JsonField";
 import { ReactFlowProvider } from "reactflow";
 import JsonTreeVisualizer from "./components/JsonTreeVisualizer/JsonTreeVisualizer";
 import styles from "./JsonTreeFlow.module.css";
+import { parseInput } from "./utils/parseInput";
 
 const sampleJSON = {
     userId: 1001,
@@ -71,11 +72,11 @@ function JsonTreeFlow() {
 
     const handleVisualize = () => {
         try {
-            const parsed = JSON.parse(jsonInput);
+            const parsed = parseInput(jsonInput);
             setParsedJson(parsed);
             setError("");
         } catch (err) {
-            setError("Invalid JSON - " + err.message);
+            setError(err.message);
         }
     };
 
