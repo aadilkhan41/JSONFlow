@@ -1,11 +1,36 @@
+/* Sizes here are mirrored in utils/buildGraph.js for layout; update both together. */
 .node {
-    padding: 8px;
+    padding: 8px 10px;
     border-radius: 6px;
     font-size: 12px;
+    line-height: 18px;
     text-align: center;
+    white-space: nowrap;
     transition: border 0.3s, background 0.3s;
     cursor: pointer;
-    margin-bottom: 5px;
+}
+
+.group {
+    padding: 6px 4px;
+    text-align: left;
+    cursor: default;
+}
+
+.row {
+    padding: 0 6px;
+    line-height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.row:hover {
+    background: rgba(96, 165, 250, 0.12);
+}
+
+.activeRow,
+.activeRow:hover {
+    background: #1E3A8A;
 }
 
 .label {

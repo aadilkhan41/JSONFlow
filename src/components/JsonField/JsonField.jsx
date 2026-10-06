@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { CircleAlert, CircleCheck } from "lucide-react";
+import { useRef, useState } from "react";
+import { CircleAlert, CircleCheck, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { tokenize } from "../../utils/tokenize";
 import styles from "./styles.module.css";
 
@@ -28,6 +28,7 @@ function renderHighlighted(text, errors) {
 
 function JsonField({ jsonInput, setJsonInput, onCaretMove, errors, darkMode }) {
     const highlightsRef = useRef(null);
+    const [collapsed, setCollapsed] = useState(false);
     const dark = darkMode ? ` ${styles.dark}` : "";
 
     const syncScroll = (e) => {
@@ -42,13 +43,28 @@ function JsonField({ jsonInput, setJsonInput, onCaretMove, errors, darkMode }) {
             ? { label: `${errors.length} error${errors.length > 1 ? "s" : ""}`, className: styles.badgeError }
             : { label: "Valid", className: styles.badgeSuccess };
 
+    if (collapsed) {
+        return (<aside className={`${styles.container} ${styles.collapsed}`}>
+            <button className={styles.toggle} onClick={() => setCollapsed(false)} title="Expand input" aria-label="Expand input">
+                <PanelLeftOpen />
+            </button>
+            <span className={`${styles.statusDot} ${status.className}`} title={status.label} />
+            <span className={styles.railTitle}>Input</span>
+        </aside>);
+    }
+
     return (<aside className={styles.container}>
         <div className={styles.header}>
             <span className={styles.title}>Input</span>
-            <span className={`${styles.badge} ${status.className}`}>
-                {!isEmpty && (errors.length ? <CircleAlert /> : <CircleCheck />)}
-                {status.label}
-            </span>
+            <div className={styles.headerActions}>
+                <span className={`${styles.badge} ${status.className}`}>
+                    {!isEmpty && (errors.length ? <CircleAlert /> : <CircleCheck />)}
+                    {status.label}
+                </span>
+                <button className={styles.toggle} onClick={() => setCollapsed(true)} title="Minimize input" aria-label="Minimize input">
+                    <PanelLeftClose />
+                </button>
+            </div>
         </div>
         <div className={styles.editor}>
             <pre ref={highlightsRef} className={styles.highlights + dark} aria-hidden="true">
