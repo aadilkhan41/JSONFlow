@@ -11,8 +11,6 @@
         "start": "vite preview"
     },
     "dependencies": {
-        "html2canvas": "^1.4.1",
-        "json5": "^2.2.3",
         "lucide-react": "^0.548.0",
         "react": "^19.1.1",
         "react-dom": "^19.1.1",

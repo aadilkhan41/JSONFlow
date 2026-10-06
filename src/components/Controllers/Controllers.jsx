@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { useReactFlow } from "reactflow";
-import { handleSaveAsImage } from "../../utils/utils";
-import { ImageDown, Maximize, Minus, Plus } from "lucide-react";
+import { Maximize, Minus, Plus } from "lucide-react";
 import styles from "./styles.module.css";
 
-function Controllers({ darkMode, reactFlowWrapper, setElements, searchQuery, setSearchResult }) {
+function Controllers({ setElements, searchQuery, setSearchResult }) {
     const { zoomIn, zoomOut, fitView, setCenter } = useReactFlow();
 
     useEffect(() => {
-        if (!searchQuery.trim()) return;
+        if (!searchQuery.trim()) {
+            setSearchResult("");
+            return;
+        }
         let found = false;
         setElements((prev) => {
             const updatedNodes = prev.nodes.map((node) => {
@@ -26,14 +28,14 @@ function Controllers({ darkMode, reactFlowWrapper, setElements, searchQuery, set
             });
             return { ...prev, nodes: updatedNodes };
         });
-        setSearchResult(found ? "Match found!" : "Oops No match found");
-    }, [searchQuery, setCenter]);
+        setSearchResult(found ? "Match found" : "No match for this path");
+    }, [searchQuery, setCenter, setElements, setSearchResult]);
 
     return (<div className={styles.controls}>
-        <button className={darkMode? `${styles.buttonStyle} ${styles.dark}` : styles.buttonStyle} onClick={zoomIn}><Plus /></button>
-        <button className={darkMode? `${styles.buttonStyle} ${styles.dark}` : styles.buttonStyle} onClick={zoomOut}><Minus /></button>
-        <button className={darkMode? `${styles.buttonStyle} ${styles.dark}` : styles.buttonStyle} onClick={fitView}><Maximize /></button>
-        <button className={darkMode? `${styles.buttonStyle} ${styles.dark}` : styles.buttonStyle} onClick={() => handleSaveAsImage(reactFlowWrapper)}><ImageDown /></button>
+        <button className={styles.buttonStyle} onClick={() => zoomIn()} title="Zoom in" aria-label="Zoom in"><Plus /></button>
+        <button className={styles.buttonStyle} onClick={() => zoomOut()} title="Zoom out" aria-label="Zoom out"><Minus /></button>
+        <span className={styles.divider} />
+        <button className={styles.buttonStyle} onClick={() => fitView({ duration: 300 })} title="Fit to screen" aria-label="Fit to screen"><Maximize /></button>
     </div>);
 }
 

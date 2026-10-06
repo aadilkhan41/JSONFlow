@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import ReactFlow, { Background, MarkerType } from "reactflow";
+import { useEffect, useState } from "react";
+import ReactFlow, { Background, BackgroundVariant, MarkerType } from "reactflow";
 import { getColorByType } from "../../utils/utils";
 import styles from "./styles.module.css";
 import Controllers from "../Controllers/Controllers";
@@ -15,7 +15,7 @@ function buildTree(obj, parentId = null, depth = 0, parentY = 0, path = "$", dar
     const entries = Object.entries(obj);
     if (entries.length === 0) return { nodes, edges, height: 1 };
 
-    const childHeights = entries.map(([key, value]) =>
+    const childHeights = entries.map(([, value]) =>
         typeof value === "object" && value !== null && Object.keys(value).length > 0
             ? buildTree(value).height
             : 1
@@ -85,8 +85,6 @@ function buildTree(obj, parentId = null, depth = 0, parentY = 0, path = "$", dar
 function JsonTreeVisualizer({ jsonData, searchQuery, darkMode }) {
     const [elements, setElements] = useState({ nodes: [], edges: [] });
     const [searchResult, setSearchResult] = useState("");
-    const reactFlowWrapper = useRef(null);
-
     useEffect(() => {
         nodeId = 0;
         const rootId = `${++nodeId}`;
@@ -109,20 +107,32 @@ function JsonTreeVisualizer({ jsonData, searchQuery, darkMode }) {
     const nodeTypes = { custom: Node };
 
     return (
-        <div className={darkMode ? `${styles.treeCont} ${styles.dark}` : styles.treeCont} ref={reactFlowWrapper}>
+        <div className={darkMode ? `${styles.treeCont} ${styles.dark}` : styles.treeCont}>
             <ReactFlow
                 nodes={elements.nodes}
                 edges={elements.edges}
                 nodeTypes={nodeTypes}
                 fitView
+                minZoom={0.05}
+                maxZoom={4}
                 nodesDraggable={false}
                 nodesConnectable={false}
                 panOnScroll
+                proOptions={{ hideAttribution: true }}
             >
-                <Background color={darkMode ? "#1E1E1E" : "#e5e7eb"} />
+                <Background
+                    variant={BackgroundVariant.Dots}
+                    gap={20}
+                    size={1.5}
+                    color={darkMode ? "#4B5563" : "#9CA3AF"}
+                />
             </ReactFlow>
-            <Controllers darkMode={darkMode} reactFlowWrapper={reactFlowWrapper} setElements={setElements} searchQuery={searchQuery} setSearchResult={setSearchResult} />
-            {searchResult && <div className={darkMode ? `${styles.searchResult} ${styles.dark}` : styles.searchResult}>{searchResult}</div>}
+            <Controllers setElements={setElements} searchQuery={searchQuery} setSearchResult={setSearchResult} />
+            {searchResult && (
+                <div className={`${styles.searchResult} ${searchResult === "Match found" ? styles.found : styles.notFound}`}>
+                    {searchResult}
+                </div>
+            )}
         </div>
     );
 }

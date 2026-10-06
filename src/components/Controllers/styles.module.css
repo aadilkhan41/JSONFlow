@@ -1,36 +1,48 @@
 .controls {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 14px;
+    right: 14px;
+    z-index: 5;
     display: flex;
-    gap: 6px;
+    padding: 4px;
+    gap: 2px;
+    border-radius: 10px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    box-shadow: var(--shadow);
 }
 
 .buttonStyle {
-    background: #E5E7EB;
-    color: #1E1E1E;
-    border: 1px solid #414141;
-    padding: 9px 10px;
-    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text);
     cursor: pointer;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    box-sizing: border-box;
+    transition: background 0.15s, color 0.15s;
 }
 
-.buttonStyle.dark {
-    background: #1E1E1E;
-    color: #E5E7EB;
+.buttonStyle:hover {
+    background: var(--surface-hover);
+    color: var(--accent);
+}
+
+.buttonStyle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
 }
 
 .buttonStyle svg {
-    width: 18px;
-    height: 18px;
-    stroke: #1E1E1E;
+    width: 16px;
+    height: 16px;
 }
 
-.buttonStyle.dark svg{
-    stroke: #E5E7EB;
+.divider {
+    width: 1px;
+    margin: 6px 2px;
+    background: var(--border-strong);
 }

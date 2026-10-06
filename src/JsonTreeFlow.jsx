@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "reactflow/dist/style.css";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import JsonField from "./components/JsonField/JsonField";
@@ -65,33 +65,30 @@ const sampleJSON = {
 
 function JsonTreeFlow() {
     const [jsonInput, setJsonInput] = useState(JSON.stringify(sampleJSON, null, 4));
-    const [error, setError] = useState("");
     const [parsedJson, setParsedJson] = useState(sampleJSON);
     const [searchQuery, setSearchQuery] = useState("");
     const [darkMode, setDarkMode] = useState(true);
 
-    const handleVisualize = () => {
-        try {
-            const parsed = parseInput(jsonInput);
-            setParsedJson(parsed);
-            setError("");
-        } catch (err) {
-            setError(err.message);
-        }
-    };
+    const { value, errors } = useMemo(() => parseInput(jsonInput), [jsonInput]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setParsedJson(value !== null && typeof value === "object" ? value : {});
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [value]);
 
     const handleReset = () => {
         setJsonInput("");
         setParsedJson({});
         setSearchQuery("");
-        setError("");
     };
 
     return (
-        <div className={styles.appCont} >
+        <div className={darkMode ? `${styles.appCont} ${styles.dark}` : styles.appCont}>
             <NavigationBar darkMode={darkMode} searchQuery={searchQuery} setSearchQuery={setSearchQuery} setDarkMode={setDarkMode} handleReset={handleReset} />
             <article>
-                <JsonField jsonInput={jsonInput} setJsonInput={setJsonInput} handleVisualize={handleVisualize} error={error} darkMode={darkMode} />
+                <JsonField jsonInput={jsonInput} setJsonInput={setJsonInput} errors={errors} darkMode={darkMode} />
                 <section>
                     <ReactFlowProvider>
                         <JsonTreeVisualizer
