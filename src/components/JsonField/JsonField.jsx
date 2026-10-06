@@ -26,7 +26,7 @@ function renderHighlighted(text, errors) {
     return parts;
 }
 
-function JsonField({ jsonInput, setJsonInput, errors, darkMode }) {
+function JsonField({ jsonInput, setJsonInput, onCaretMove, errors, darkMode }) {
     const highlightsRef = useRef(null);
     const dark = darkMode ? ` ${styles.dark}` : "";
 
@@ -59,6 +59,7 @@ function JsonField({ jsonInput, setJsonInput, errors, darkMode }) {
                 value={jsonInput}
                 onChange={(e) => setJsonInput(e.target.value)}
                 onScroll={syncScroll}
+                onSelect={(e) => onCaretMove(e.target.selectionStart)}
                 spellCheck={false}
                 placeholder="Paste JSON or a JavaScript object..."
             />

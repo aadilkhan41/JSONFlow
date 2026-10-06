@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import ReactFlow, { Background, BackgroundVariant, MarkerType } from "reactflow";
+import { useEffect, useMemo, useRef, useState } from "react";
+import ReactFlow, { Background, BackgroundVariant, MarkerType, useReactFlow } from "reactflow";
 import { getColorByType } from "../../utils/utils";
 import styles from "./styles.module.css";
 import Controllers from "../Controllers/Controllers";
@@ -82,9 +82,44 @@ function buildTree(obj, parentId = null, depth = 0, parentY = 0, path = "$", dar
     return { nodes, edges, height: totalHeight };
 }
 
-function JsonTreeVisualizer({ jsonData, searchQuery, darkMode }) {
+const FOCUS_ZOOM = 1.5;
+
+function JsonTreeVisualizer({ jsonData, activePath, searchQuery, darkMode }) {
     const [elements, setElements] = useState({ nodes: [], edges: [] });
-    const [searchResult, setSearchResult] = useState("");
+    const { setCenter, getNode, getZoom } = useReactFlow();
+    const focusedPathRef = useRef(null);
+
+    const nodes = useMemo(
+        () => elements.nodes.map((node) => {
+            const isHighlighted = !!activePath && node.data.path === activePath;
+            return isHighlighted === node.data.isHighlighted ? node : { ...node, data: { ...node.data, isHighlighted } };
+        }),
+        [elements.nodes, activePath]
+    );
+
+    // Elements rebuild shortly after typing, so a path may only become focusable on a later render.
+    useEffect(() => {
+        if (!activePath) {
+            focusedPathRef.current = null;
+            return;
+        }
+        if (focusedPathRef.current === activePath) return;
+        const target = elements.nodes.find((node) => node.data.path === activePath);
+        if (!target) return;
+        focusedPathRef.current = activePath;
+        const measured = getNode(target.id);
+        const width = measured?.width ?? 0;
+        const height = measured?.height ?? 0;
+        setCenter(target.position.x + width / 2, target.position.y + height / 2, {
+            zoom: Math.max(getZoom(), FOCUS_ZOOM),
+            duration: 500,
+        });
+    }, [activePath, elements.nodes, getNode, getZoom, setCenter]);
+
+    const searchResult = searchQuery
+        ? elements.nodes.some((node) => node.data.path === searchQuery) ? "Match found" : "No match for this path"
+        : "";
+
     useEffect(() => {
         nodeId = 0;
         const rootId = `${++nodeId}`;
@@ -109,7 +144,7 @@ function JsonTreeVisualizer({ jsonData, searchQuery, darkMode }) {
     return (
         <div className={darkMode ? `${styles.treeCont} ${styles.dark}` : styles.treeCont}>
             <ReactFlow
-                nodes={elements.nodes}
+                nodes={nodes}
                 edges={elements.edges}
                 nodeTypes={nodeTypes}
                 fitView
@@ -127,7 +162,7 @@ function JsonTreeVisualizer({ jsonData, searchQuery, darkMode }) {
                     color={darkMode ? "#4B5563" : "#9CA3AF"}
                 />
             </ReactFlow>
-            <Controllers setElements={setElements} searchQuery={searchQuery} setSearchResult={setSearchResult} />
+            <Controllers />
             {searchResult && (
                 <div className={`${styles.searchResult} ${searchResult === "Match found" ? styles.found : styles.notFound}`}>
                     {searchResult}

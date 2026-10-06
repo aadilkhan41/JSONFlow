@@ -16,6 +16,7 @@ const KEYWORDS = { true: true, false: false, null: null, undefined: null, Infini
 export function parseInput(text) {
     const n = text.length;
     const errors = [];
+    const ranges = [];
     let i = 0;
 
     const addError = (start, end, message) => errors.push({ start, end: Math.max(end, start + 1), message });
@@ -161,10 +162,10 @@ export function parseInput(text) {
         return num && num.ok ? String(num.value) : null;
     };
 
-    const parseValue = () => {
+    const parseValue = (path) => {
         const ch = text[i];
-        if (ch === "{") return { ok: true, value: parseObject() };
-        if (ch === "[") return { ok: true, value: parseArray() };
+        if (ch === "{") return { ok: true, value: parseObject(path) };
+        if (ch === "[") return { ok: true, value: parseArray(path) };
         if (QUOTES.has(ch)) return readString();
         if (/[-+\d.]/.test(ch)) {
             const num = readNumber();
@@ -188,7 +189,7 @@ export function parseInput(text) {
         return { ok: false, message: `Unknown value "${word}"` };
     };
 
-    function parseObject() {
+    function parseObject(path) {
         const open = i++;
         const obj = {};
         while (true) {
@@ -239,9 +240,12 @@ export function parseInput(text) {
                         addError(entryStart, colonEnd, `Missing value for "${key}"`);
                         recovered = true;
                     } else {
-                        const res = parseValue();
-                        if (res.ok) obj[key] = res.value;
-                        else recover(`${res.message} in "${key}"`);
+                        const childPath = `${path}.${key}`;
+                        const res = parseValue(childPath);
+                        if (res.ok) {
+                            obj[key] = res.value;
+                            ranges.push({ path: childPath, start: entryStart, end: i });
+                        } else recover(`${res.message} in "${key}"`);
                     }
                 }
             }
@@ -256,7 +260,7 @@ export function parseInput(text) {
         }
     }
 
-    function parseArray() {
+    function parseArray(path) {
         const open = i++;
         const arr = [];
         while (true) {
@@ -282,9 +286,11 @@ export function parseInput(text) {
 
             const start = i;
             let recovered = false;
-            const res = parseValue();
+            const childPath = `${path}.${arr.length}`;
+            const res = parseValue(childPath);
             if (res.ok) {
                 arr.push(res.value);
+                ranges.push({ path: childPath, start, end: i });
             } else {
                 let end = skipToSync(i, false);
                 if (end === start) end++;
@@ -310,7 +316,7 @@ export function parseInput(text) {
     let value;
     if (i < n) {
         const start = i;
-        const res = parseValue();
+        const res = parseValue("$");
         if (res.ok) value = res.value;
         else addError(start, trimEnd(skipToSync(i, false)), res.message);
 
@@ -325,5 +331,16 @@ export function parseInput(text) {
     errors.sort((a, b) => a.start - b.start);
     for (const err of errors) err.line = text.slice(0, err.start).split("\n").length;
 
-    return { value, errors };
+    return { value, errors, ranges };
+}
+
+/** Returns the JSON path of the innermost field whose source text contains `pos`. */
+export function pathAtPosition(ranges, pos) {
+    let best = null;
+    for (const range of ranges) {
+        if (range.start <= pos && pos <= range.end && (!best || range.end - range.start < best.end - best.start)) {
+            best = range;
+        }
+    }
+    return best?.path ?? null;
 }

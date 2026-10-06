@@ -5,7 +5,7 @@ import JsonField from "./components/JsonField/JsonField";
 import { ReactFlowProvider } from "reactflow";
 import JsonTreeVisualizer from "./components/JsonTreeVisualizer/JsonTreeVisualizer";
 import styles from "./JsonTreeFlow.module.css";
-import { parseInput } from "./utils/parseInput";
+import { parseInput, pathAtPosition } from "./utils/parseInput";
 
 const sampleJSON = {
     userId: 1001,
@@ -68,8 +68,22 @@ function JsonTreeFlow() {
     const [parsedJson, setParsedJson] = useState(sampleJSON);
     const [searchQuery, setSearchQuery] = useState("");
     const [darkMode, setDarkMode] = useState(true);
+    const [caret, setCaret] = useState(null);
+    const [focusSource, setFocusSource] = useState("caret");
 
-    const { value, errors } = useMemo(() => parseInput(jsonInput), [jsonInput]);
+    const { value, errors, ranges } = useMemo(() => parseInput(jsonInput), [jsonInput]);
+    const caretPath = useMemo(() => (caret === null ? null : pathAtPosition(ranges, caret)), [ranges, caret]);
+    const activePath = focusSource === "search" ? searchQuery.trim() : caretPath;
+
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+        setFocusSource("search");
+    };
+
+    const handleCaretMove = (pos) => {
+        setCaret(pos);
+        setFocusSource("caret");
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -82,18 +96,20 @@ function JsonTreeFlow() {
         setJsonInput("");
         setParsedJson({});
         setSearchQuery("");
+        setCaret(null);
     };
 
     return (
         <div className={darkMode ? `${styles.appCont} ${styles.dark}` : styles.appCont}>
-            <NavigationBar darkMode={darkMode} searchQuery={searchQuery} setSearchQuery={setSearchQuery} setDarkMode={setDarkMode} handleReset={handleReset} />
+            <NavigationBar darkMode={darkMode} searchQuery={searchQuery} setSearchQuery={handleSearch} setDarkMode={setDarkMode} handleReset={handleReset} />
             <article>
-                <JsonField jsonInput={jsonInput} setJsonInput={setJsonInput} errors={errors} darkMode={darkMode} />
+                <JsonField jsonInput={jsonInput} setJsonInput={setJsonInput} onCaretMove={handleCaretMove} errors={errors} darkMode={darkMode} />
                 <section>
                     <ReactFlowProvider>
                         <JsonTreeVisualizer
                             jsonData={parsedJson}
-                            searchQuery={searchQuery}
+                            activePath={activePath}
+                            searchQuery={focusSource === "search" ? searchQuery.trim() : ""}
                             darkMode={darkMode}
                         />
                     </ReactFlowProvider>
